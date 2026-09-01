@@ -3,6 +3,7 @@ import { useTrainingContext } from "../../shared/hooks/useTrainingContext";
 import { weekTemplate } from "../../sport-data/programs/weekTemplate";
 import { Card } from "../../shared/components/Card";
 import { PageContainer } from "../../shared/components/PageContainer";
+import { CATEGORY_LABELS } from "../../sport-data/content/editorial";
 import { cn } from "../../shared/utils/cn";
 
 const WEEKDAY_LABELS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
@@ -38,13 +39,24 @@ export function ProgramPage() {
               className={cn(
                 "flex items-center justify-between",
                 isToday && "border-2 border-sage-600",
+                !template && "bg-warmgray-50/60 shadow-none",
               )}
             >
               <div>
                 <p className="text-sm font-semibold text-warmgray-500">{label}</p>
-                <p className="text-lg font-medium text-warmgray-900">
+                <p
+                  className={cn(
+                    "text-lg font-medium",
+                    template ? "text-warmgray-900" : "text-warmgray-500",
+                  )}
+                >
                   {template ? template.title : "Repos ou marche libre"}
                 </p>
+                {template && (
+                  <p className="mt-0.5 text-xs text-warmgray-400">
+                    {template.focus.map((c) => CATEGORY_LABELS[c]).join(" · ")}
+                  </p>
+                )}
               </div>
               <div className="text-right">
                 {isDone ? (

@@ -6,8 +6,9 @@ Une application web mobile-first qui fonctionne comme un coach sportif quotidien
 rassurant, pour une reprise progressive de l'activité physique — pensée en premier lieu pour
 Marie, 68 ans, mais conçue pour s'étendre à d'autres profils 60+.
 
-Voir [`docs/PRODUCT.md`](docs/PRODUCT.md) pour la vision produit et [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-pour l'architecture technique.
+Voir [`docs/PRODUCT.md`](docs/PRODUCT.md) pour la vision produit, [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+pour l'architecture technique, et [`docs/ILLUSTRATIONS.md`](docs/ILLUSTRATIONS.md) pour la
+direction artistique et le système d'illustrations.
 
 ## Stack
 

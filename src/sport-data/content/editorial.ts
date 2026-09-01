@@ -34,6 +34,16 @@ export const CONSISTENCY_MESSAGES = [
   "Tu prends soin de toi, un jour à la fois.",
 ] as const;
 
+export const SESSION_COMPLETE_TITLE = "Séance terminée 🌿";
+
+export function sessionDurationMessage(minutes: number): string {
+  return `${minutes} minute${minutes > 1 ? "s" : ""} pour toi.`;
+}
+
+export const HOW_WAS_SESSION_QUESTION = "Comment était cette séance ?";
+export const SESSION_FEEDBACK_HELP = "Ton ressenti aide à ajuster les prochaines séances.";
+export const POST_FEEDBACK_MESSAGE = "Bravo d'avoir pris ce temps pour toi.";
+
 export const START_SESSION_CTA = "Commencer ma séance";
 export const CREATE_PROGRAM_CTA = "Créer mon programme";
 

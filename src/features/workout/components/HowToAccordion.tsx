@@ -13,6 +13,7 @@ interface HowToAccordionProps {
  */
 export function HowToAccordion({ exercise }: HowToAccordionProps) {
   const [open, setOpen] = useState(false);
+  const panelId = `how-to-${exercise.id}`;
 
   return (
     <div className="mt-5 rounded-2xl border border-warmgray-200">
@@ -20,16 +21,20 @@ export function HowToAccordion({ exercise }: HowToAccordionProps) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
+        aria-controls={panelId}
         className="flex min-h-12 w-full items-center justify-between px-4 py-3 text-left text-base font-medium text-warmgray-900"
       >
         Comment faire cet exercice ?
-        <span aria-hidden="true" className={cn("transition-transform", open && "rotate-180")}>
+        <span aria-hidden="true" className={cn("text-xl transition-transform", open && "rotate-180")}>
           ⌄
         </span>
       </button>
 
       {open && (
-        <div className="space-y-4 border-t border-warmgray-200 px-4 py-4 text-warmgray-700">
+        <div
+          id={panelId}
+          className="space-y-4 border-t border-warmgray-200 px-4 py-4 text-warmgray-700"
+        >
           <section>
             <h2 className="text-xs font-semibold uppercase tracking-wide text-warmgray-500">
               Position de départ

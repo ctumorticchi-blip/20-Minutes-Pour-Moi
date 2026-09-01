@@ -10,6 +10,7 @@ import { Card } from "../../shared/components/Card";
 import { PageContainer } from "../../shared/components/PageContainer";
 import { ProgressDots } from "../../shared/components/ProgressDots";
 import {
+  CATEGORY_LABELS,
   NO_SESSION_YET_MESSAGE,
   REST_DAY_MESSAGE,
   RESUME_AFTER_BREAK_MESSAGE,
@@ -86,9 +87,10 @@ export function TodayPage() {
             <p className="mt-3 text-sm text-terracotta-700">{RESUME_AFTER_BREAK_MESSAGE}</p>
           )}
 
-          <Card className="mt-5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-warmgray-500">
+          <Card className="mt-5 border-sage-100 bg-sage-50/40">
+            <p className="text-xs font-semibold uppercase tracking-wide text-sage-700">
               Aujourd'hui
+              {context.dayTemplate && ` · ${CATEGORY_LABELS[context.dayTemplate.focus[0]]}`}
             </p>
             <p className="mt-1 text-xl font-semibold text-warmgray-900">
               {context.dayTemplate?.title ?? NO_SESSION_YET_MESSAGE}

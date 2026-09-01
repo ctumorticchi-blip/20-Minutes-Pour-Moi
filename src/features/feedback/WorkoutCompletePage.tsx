@@ -4,7 +4,14 @@ import { useAppData } from "../../app/providers/AppDataProvider";
 import type { DailyEnergy, DailyPainArea, WorkoutDifficultyFeedback } from "../../shared/types";
 import { Button } from "../../shared/components/Button";
 import { PageContainer } from "../../shared/components/PageContainer";
-import { DIFFICULTY_FEEDBACK_LABELS } from "../../sport-data/content/editorial";
+import {
+  DIFFICULTY_FEEDBACK_LABELS,
+  HOW_WAS_SESSION_QUESTION,
+  POST_FEEDBACK_MESSAGE,
+  SESSION_COMPLETE_TITLE,
+  SESSION_FEEDBACK_HELP,
+  sessionDurationMessage,
+} from "../../sport-data/content/editorial";
 import { cn } from "../../shared/utils/cn";
 
 interface CompletionState {
@@ -51,12 +58,11 @@ export function WorkoutCompletePage() {
   if (submitted) {
     return (
       <PageContainer className="flex flex-col items-center justify-center text-center">
-        <p className="text-4xl">🌿</p>
-        <h1 className="mt-4 text-2xl font-semibold text-warmgray-900">Belle séance.</h1>
-        <p className="mt-2 text-warmgray-600">
-          {state.actualDurationMinutes} minute{state.actualDurationMinutes > 1 ? "s" : ""} rien
-          que pour toi. Chaque séance compte.
+        <p className="text-4xl" aria-hidden="true">
+          🌿
         </p>
+        <h1 className="mt-4 text-2xl font-semibold text-warmgray-900">{POST_FEEDBACK_MESSAGE}</h1>
+        <p className="mt-2 text-warmgray-600">Chaque séance compte.</p>
         <div className="mt-8 w-full space-y-3">
           <Button onClick={() => navigate("/progress")}>Voir ma progression</Button>
           <Button variant="secondary" onClick={() => navigate("/today")}>
@@ -68,11 +74,19 @@ export function WorkoutCompletePage() {
   }
 
   return (
-    <PageContainer>
-      <h1 className="text-2xl font-semibold text-warmgray-900">Comment était cette séance ?</h1>
-      <p className="mt-2 text-warmgray-600">Ton ressenti aide à ajuster les prochaines séances.</p>
+    <PageContainer className="text-center">
+      <p className="text-4xl" aria-hidden="true">
+        🌿
+      </p>
+      <h1 className="mt-4 text-2xl font-semibold text-warmgray-900">{SESSION_COMPLETE_TITLE}</h1>
+      <p className="mt-1 text-warmgray-600">
+        {sessionDurationMessage(state.actualDurationMinutes)}
+      </p>
 
-      <div className="mt-6 space-y-3">
+      <h2 className="mt-8 text-lg font-semibold text-warmgray-900">{HOW_WAS_SESSION_QUESTION}</h2>
+      <p className="mt-1 text-sm text-warmgray-600">{SESSION_FEEDBACK_HELP}</p>
+
+      <div className="mt-5 space-y-3 text-left">
         {FEEDBACK_OPTIONS.map((option) => (
           <button
             key={option}

@@ -9,7 +9,6 @@ import { HowToAccordion } from "./HowToAccordion";
 interface ExerciseCardProps {
   exercise: MoveExercise;
   workoutExercise: WorkoutExercise;
-  positionLabel: string;
   countdown?: {
     remainingSeconds: number;
     status: CountdownStatus;
@@ -19,20 +18,27 @@ interface ExerciseCardProps {
     resume: () => void;
     restart: () => void;
   };
+  /** Called when the "J'ai terminé" CTA is pressed on a repetitions-based exercise. */
+  onComplete: () => void;
 }
 
 function CountdownControl({ countdown }: { countdown: NonNullable<ExerciseCardProps["countdown"]> }) {
   const { remainingSeconds, status, isDone } = countdown;
+  const statusLabel =
+    status === "idle" ? "Prête à démarrer" : status === "paused" ? "En pause" : "En cours";
 
   return (
     <div className="mt-5 flex flex-col items-center gap-3">
       <p
-        className="text-5xl font-semibold tabular-nums text-warmgray-900"
+        className="text-6xl font-semibold tabular-nums text-warmgray-900"
         aria-live="polite"
         aria-atomic="true"
       >
         {formatMinutesSeconds(remainingSeconds)}
       </p>
+      <span className="sr-only" role="status">
+        {isDone ? "Exercice terminé" : statusLabel}
+      </span>
 
       {isDone ? (
         <>
@@ -42,7 +48,7 @@ function CountdownControl({ countdown }: { countdown: NonNullable<ExerciseCardPr
           </Button>
         </>
       ) : status === "idle" ? (
-        <Button className="w-auto px-8" onClick={countdown.start}>
+        <Button className="w-auto px-10" onClick={countdown.start}>
           Démarrer
         </Button>
       ) : (
@@ -63,45 +69,66 @@ function CountdownControl({ countdown }: { countdown: NonNullable<ExerciseCardPr
   );
 }
 
-export function ExerciseCard({
-  exercise,
+function RepetitionsControl({
   workoutExercise,
-  positionLabel,
-  countdown,
-}: ExerciseCardProps) {
+  onComplete,
+}: {
+  workoutExercise: WorkoutExercise;
+  onComplete: () => void;
+}) {
+  const sets = workoutExercise.sets ?? 1;
+  const label =
+    sets > 1
+      ? `${sets} × ${workoutExercise.repetitions} répétitions`
+      : `${workoutExercise.repetitions} répétitions`;
+
+  return (
+    <div className="mt-5 flex flex-col items-center gap-3">
+      <p className="text-4xl font-semibold text-warmgray-900">{label}</p>
+      <Button className="w-auto px-10" onClick={onComplete}>
+        J'ai terminé
+      </Button>
+    </div>
+  );
+}
+
+export function ExerciseCard({ exercise, workoutExercise, countdown, onComplete }: ExerciseCardProps) {
   const mainCue = exercise.instructions[0];
   const essentialTip = exercise.cues?.[0];
 
   return (
     <div>
-      <p className="text-sm font-medium text-warmgray-500">{positionLabel}</p>
-      <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-sage-700">
+      <p className="text-xs font-semibold uppercase tracking-wide text-sage-700">
         {CATEGORY_LABELS[exercise.category]}
-        {(workoutExercise.sets ?? 1) > 1 && ` · ${workoutExercise.sets} séries`}
+        {(workoutExercise.sets ?? 1) > 1 && !countdown && ` · ${workoutExercise.sets} séries`}
       </p>
       <h1 className="mt-1 text-2xl font-semibold text-warmgray-900">{exercise.name}</h1>
 
       <ExerciseIllustration
         illustrationKey={exercise.illustrationKey}
         category={exercise.category}
+        name={exercise.name}
         className="mt-4"
       />
+
+      {mainCue && <p className="mt-5 text-lg text-warmgray-800">{mainCue}</p>}
 
       {countdown ? (
         <CountdownControl countdown={countdown} />
       ) : (
-        <p className="mt-5 text-3xl font-semibold text-warmgray-900">
-          {workoutExercise.repetitions} répétitions
-        </p>
+        <RepetitionsControl workoutExercise={workoutExercise} onComplete={onComplete} />
       )}
-
-      {mainCue && <p className="mt-5 text-warmgray-800">{mainCue}</p>}
 
       {exercise.breathingCue && (
-        <p className="mt-3 text-sm italic text-warmgray-500">{exercise.breathingCue}</p>
+        <p className="mt-4 text-sm italic text-warmgray-500">{exercise.breathingCue}</p>
       )}
 
-      {essentialTip && <p className="mt-3 text-sm text-warmgray-500">💡 {essentialTip}</p>}
+      {essentialTip && (
+        <p className="mt-3 text-sm text-warmgray-500">
+          <span aria-hidden="true">💡 </span>
+          {essentialTip}
+        </p>
+      )}
 
       {exercise.avoidWith && exercise.avoidWith.length > 0 && (
         <p className="mt-3 text-xs text-warmgray-400">{PAIN_DURING_SESSION_NOTICE}</p>

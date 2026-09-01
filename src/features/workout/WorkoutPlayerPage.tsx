@@ -6,6 +6,7 @@ import { generateWorkout } from "../../engine/workout/generateWorkout";
 import { exercisesById } from "../../sport-data/exercises";
 import type { WorkoutExercise } from "../../shared/types";
 import { Button } from "../../shared/components/Button";
+import { cn } from "../../shared/utils/cn";
 import { ExerciseCard } from "./components/ExerciseCard";
 import { useCountdown } from "./useCountdown";
 
@@ -15,6 +16,9 @@ const SECTION_LABELS: Record<Section, string> = {
   main: "Séance principale",
   cooldown: "Retour au calme",
 };
+
+/** How long the brief "Très bien 🌿" acknowledgment stays visible after moving on. */
+const ENCOURAGEMENT_DURATION_MS = 1100;
 
 interface FlatItem {
   section: Section;
@@ -36,6 +40,7 @@ export function WorkoutPlayerPage() {
   // Lazy initializer: runs once on mount, not during every render.
   const [startedAt] = useState(() => Date.now());
   const [index, setIndex] = useState(0);
+  const [showEncouragement, setShowEncouragement] = useState(false);
 
   const workout = useMemo(() => {
     if (!profile || !context.dayTemplate || !context.todaysCheckIn) return null;
@@ -68,6 +73,12 @@ export function WorkoutPlayerPage() {
     window.scrollTo({ top: 0 });
   }, [index]);
 
+  useEffect(() => {
+    if (!showEncouragement) return;
+    const timeout = setTimeout(() => setShowEncouragement(false), ENCOURAGEMENT_DURATION_MS);
+    return () => clearTimeout(timeout);
+  }, [showEncouragement]);
+
   if (!profile || !context.todaysCheckIn) {
     return <Navigate to="/today" replace />;
   }
@@ -96,6 +107,7 @@ export function WorkoutPlayerPage() {
       });
       return;
     }
+    setShowEncouragement(true);
     setIndex((i) => Math.min(i + 1, items.length - 1));
   }
 
@@ -105,9 +117,9 @@ export function WorkoutPlayerPage() {
 
   return (
     <div className="mx-auto flex min-h-svh w-full max-w-xl flex-col px-5 pb-8 pt-6">
-      <div className="mb-4 flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-wide text-warmgray-400">
-          {SECTION_LABELS[current.section]}
+      <div className="mb-3 flex items-center justify-between">
+        <p className="text-sm font-semibold text-warmgray-700">
+          Exercice {index + 1} sur {items.length}
         </p>
         <button
           type="button"
@@ -118,20 +130,35 @@ export function WorkoutPlayerPage() {
         </button>
       </div>
 
-      <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-warmgray-100" aria-hidden="true">
+      <div className="mb-1 h-1.5 w-full overflow-hidden rounded-full bg-warmgray-100" aria-hidden="true">
         <div
           className="h-full rounded-full bg-sage-600 transition-all"
           style={{ width: `${((index + 1) / items.length) * 100}%` }}
         />
       </div>
 
-      <div className="flex-1">
+      <div className="mb-3 flex h-6 items-center" aria-hidden="true">
+        <span
+          className={cn(
+            "rounded-full bg-sage-100 px-3 py-1 text-xs font-medium text-sage-700 transition-opacity",
+            showEncouragement ? "opacity-100" : "opacity-0",
+          )}
+        >
+          Très bien 🌿 — exercice suivant
+        </span>
+      </div>
+
+      <p className="text-xs font-semibold uppercase tracking-wide text-warmgray-400">
+        {SECTION_LABELS[current.section]}
+      </p>
+
+      <div className="mt-2 flex-1">
         <ExerciseCard
           key={index}
           exercise={currentExercise}
           workoutExercise={current.workoutExercise}
-          positionLabel={`${index + 1} / ${items.length}`}
           countdown={isTimed ? countdown : undefined}
+          onComplete={goNext}
         />
       </div>
 

@@ -26,8 +26,8 @@ export function ProgressPage() {
     <PageContainer>
       <h1 className="text-2xl font-semibold text-warmgray-900">Progrès</h1>
 
-      <Card className="mt-6">
-        <p className="text-sm font-semibold uppercase tracking-wide text-warmgray-500">
+      <Card className="mt-6 border-sage-100 bg-sage-50/40">
+        <p className="text-sm font-semibold uppercase tracking-wide text-sage-700">
           Cette semaine
         </p>
         <div className="mt-2">

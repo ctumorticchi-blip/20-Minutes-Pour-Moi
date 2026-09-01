@@ -106,9 +106,40 @@ exercices, programme 12 semaines, tests métier, stockage local versionné.
 Non construit (volontairement) : nutrition, authentification, backend, paiement, IA générative,
 notifications push, objets connectés, réseau social.
 
-## Roadmap (post-M0)
+## M0.1 — corrections
 
-- Illustrations réelles des exercices (l'architecture des placeholders est prête à les recevoir).
+Le minuteur d'exercice a été revu en profondeur : il ne démarre plus jamais tout seul (états
+`idle` / `running` / `paused` explicites, bouton "Démarrer"), se remet correctement à zéro à
+chaque exercice, et propose un bouton "Recommencer". Les 35 exercices ont reçu une position de
+départ, une respiration et des points d'attention réellement utilisables — voir "Comment faire cet
+exercice ?" ci-dessous.
+
+## M1 — direction artistique et Workout Player
+
+M1 transforme le prototype fonctionnel en une expérience plus aboutie visuellement, sans toucher au
+moteur d'entraînement :
+
+- **Palette** dérivée de la direction artistique validée (vert profond, crème, beige chaud,
+  terracotta doux, texte `#333333`) — voir `docs/ILLUSTRATIONS.md` pour le détail et les valeurs
+  exactes.
+- **Système d'illustrations** consolidé : `illustrationKey` → asset résolu au même endroit partout
+  (`ExerciseIllustration`), prêt à recevoir de vraies images (image unique ou courte séquence
+  d'étapes) sans toucher au contenu métier ni aux écrans quand elles arriveront.
+- **Workout Player** repensé autour d'une hiérarchie unique par exercice : catégorie, nom,
+  illustration (grande, jamais minuscule), consigne essentielle, puis une seule action principale
+  — "Démarrer/Pause/Reprendre/Recommencer" pour un exercice chronométré, "J'ai terminé" pour un
+  exercice à répétitions — suivie de la respiration, d'un conseil essentiel, et du détail complet
+  dans l'accordéon "Comment faire cet exercice ?" (position de départ, étapes, respiration, points
+  d'attention, variations). La progression ("Exercice X sur Y") reste visible en permanence, et un
+  très bref accusé de passage ("Très bien 🌿") marque le passage à l'exercice suivant sans jamais
+  ralentir le rythme.
+- **Fin de séance** réordonnée : durée de la séance affichée avant la question de ressenti, puis un
+  message positif simple après le feedback — jamais de score.
+
+## Roadmap (post-M1)
+
+- Illustrations réelles des exercices (l'architecture est prête à les recevoir dès qu'elles sont
+  fournies — voir `docs/ILLUSTRATIONS.md`).
 - Mini-tests fonctionnels (5 assis-debout chronométrés, équilibre, mobilité d'épaule) : les types
   existent déjà (`src/shared/types/functionalCheck.ts`), l'UI reste à construire.
 - Extension du moteur à d'autres profils 60+ puis, plus loin, à d'autres sports (voir la section

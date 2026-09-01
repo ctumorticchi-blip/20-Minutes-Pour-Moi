@@ -103,17 +103,24 @@ React : c'est un miroir vivant du stockage, exposé via `useAppData()`.
 ## Choix techniques
 
 - **Tailwind CSS 4** avec une palette de tokens (`--color-sage-*`, `--color-terracotta-*`,
-  `--color-warmgray-*`, `--color-cream*`) définie dans `src/index.css`, pour une direction
-  artistique calme et chaleureuse sans dépendre de composants tiers.
+  `--color-warmgray-*`, `--color-cream*`) définie dans `src/index.css`, dérivée de la direction
+  artistique validée en M1 (vert profond `#2E7D6B`, crème `#F7F5F2`, beige `#EDE7DD`, terracotta
+  doux `#F4C97A`, texte `#333333` — voir `docs/ILLUSTRATIONS.md`). Chaque rampe va de 50 à 900 et
+  ses teintes 400+ sont choisies pour rester lisibles en texte (≥ 4.5:1 sur fond clair) : ne
+  jamais utiliser une teinte non définie dans `@theme`, Tailwind ne génère alors aucune classe et
+  l'élément perd silencieusement son style.
 - Pas de shadcn/ui : les besoins d'UI du M0 (cartes, boutons, sélecteurs) sont suffisamment
   simples pour rester en composants maison légers dans `shared/components/`, ce qui évite une
   dépendance supplémentaire pour un gain marginal à ce stade.
 - **React Router 7** en mode déclaratif (`<Routes>`), avec un garde `RequireProfile` qui renvoie
   vers l'onboarding tant qu'aucun profil n'existe.
-- **Illustrations** : chaque exercice porte un `illustrationKey` stable. `IllustrationPlaceholder`
-  (dans `shared/components/`) résout aujourd'hui toujours vers un placeholder cohérent par
-  catégorie ; `assets/exercises/index.ts` documente le point d'extension unique pour brancher de
-  vraies illustrations plus tard, sans toucher au contenu métier ni aux écrans.
+- **Illustrations** : chaque exercice porte un `illustrationKey` stable. `getIllustrationAsset`
+  (`assets/exercises/index.ts`) est l'unique point de résolution `illustrationKey → asset` (une
+  image seule ou une séquence de quelques étapes) ; `ExerciseIllustration`
+  (`shared/components/`) est le seul composant qui l'appelle et qui doit importer une image
+  d'exercice, avec repli systématique vers un placeholder par catégorie tant qu'aucun asset réel
+  n'est enregistré. Détail complet — direction artistique, formats, `alt`, comment brancher un
+  vrai asset — dans `docs/ILLUSTRATIONS.md`.
 
 ## Comment le moteur pourrait être réutilisé plus tard
 
