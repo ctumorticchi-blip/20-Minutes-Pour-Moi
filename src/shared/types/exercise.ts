@@ -40,6 +40,10 @@ export interface MoveExercise {
   category: ExerciseCategory;
 
   description: string;
+
+  /** Where and how to set up before starting, e.g. "Debout derrière une chaise, pieds écartés..." */
+  startingPosition: string;
+  /** The movement itself, broken into clear, ordered steps. */
   instructions: string[];
 
   durationSeconds?: number;
@@ -63,8 +67,10 @@ export interface MoveExercise {
 
   primaryBenefits: string[];
 
+  /** 1-3 short "points d'attention" (form cues / safety reminders shown in the how-to). */
   cues?: string[];
 
+  /** How to breathe through the movement, e.g. "Expire en montant. Inspire en redescendant." */
   breathingCue?: string;
 
   bodyAreas: BodyArea[];

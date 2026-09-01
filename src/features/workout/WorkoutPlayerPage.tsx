@@ -127,19 +127,11 @@ export function WorkoutPlayerPage() {
 
       <div className="flex-1">
         <ExerciseCard
+          key={index}
           exercise={currentExercise}
           workoutExercise={current.workoutExercise}
           positionLabel={`${index + 1} / ${items.length}`}
-          countdown={
-            isTimed
-              ? {
-                  remainingSeconds: countdown.remainingSeconds,
-                  isRunning: countdown.isRunning,
-                  pause: countdown.pause,
-                  resume: countdown.resume,
-                }
-              : undefined
-          }
+          countdown={isTimed ? countdown : undefined}
         />
       </div>
 

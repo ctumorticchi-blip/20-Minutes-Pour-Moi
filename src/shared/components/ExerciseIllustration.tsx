@@ -3,7 +3,7 @@ import { getIllustrationAsset } from "../../assets/exercises";
 import { CATEGORY_LABELS } from "../../sport-data/content/editorial";
 import { cn } from "../utils/cn";
 
-interface IllustrationPlaceholderProps {
+interface ExerciseIllustrationProps {
   illustrationKey: string;
   category: ExerciseCategory;
   className?: string;
@@ -18,17 +18,20 @@ const CATEGORY_STYLES: Record<ExerciseCategory, { bg: string; fg: string }> = {
 };
 
 /**
- * Generic illustration slot. Today it always renders a calm, consistent
- * placeholder (a simple moving figure + category color); once real art
- * exists for a given `illustrationKey`, `getIllustrationAsset` starts
- * returning it and this component swaps to an <img> automatically —
- * no other code needs to change.
+ * The single place that resolves `illustrationKey` → visual. Today
+ * `getIllustrationAsset` (see `src/assets/exercises/index.ts`) always
+ * returns undefined, so every exercise renders the same calm,
+ * category-colored placeholder below. Once a real illustration (SVG, WebP,
+ * PNG — any static asset importable by Vite) exists for a given key, that
+ * lookup starts returning it and this component swaps to an <img>
+ * automatically. No other screen touches illustrations directly, and no
+ * other code needs to change when real art lands.
  */
-export function IllustrationPlaceholder({
+export function ExerciseIllustration({
   illustrationKey,
   category,
   className,
-}: IllustrationPlaceholderProps) {
+}: ExerciseIllustrationProps) {
   const asset = getIllustrationAsset(illustrationKey);
   const style = CATEGORY_STYLES[category];
 
