@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  /* Warm, calm, "mediterranean-light" palette. */
+  --color-cream: #faf6ef;
+  --color-cream-dark: #f2ead9;
+  --color-sage-50: #f1f4ee;
+  --color-sage-100: #e1e9da;
+  --color-sage-300: #b7c9ab;
+  --color-sage-500: #7d9a6a;
+  --color-sage-600: #62804f;
+  --color-sage-700: #4c6440;
+  --color-sage-900: #2c3924;
+  --color-terracotta-100: #f7e3d6;
+  --color-terracotta-300: #eab48f;
+  --color-terracotta-500: #d8813f;
+  --color-terracotta-600: #bd6a2c;
+  --color-terracotta-700: #93531f;
+  --color-warmgray-50: #f7f5f2;
+  --color-warmgray-100: #ece8e2;
+  --color-warmgray-300: #cec6ba;
+  --color-warmgray-500: #93897b;
+  --color-warmgray-700: #5b5347;
+  --color-warmgray-900: #2f2b24;
+
+  --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: var(--color-cream);
+  color: var(--color-warmgray-900);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Comfortable, clearly-visible focus ring for keyboard users everywhere. */
+:focus-visible {
+  outline: 3px solid var(--color-sage-600);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect reduced-motion preferences for the workout timer and transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
